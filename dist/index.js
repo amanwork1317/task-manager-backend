@@ -13,10 +13,14 @@ const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 // Middleware
 app.use(express.json());
-app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-    credentials: true
-}));
+const corsOptions = {
+    origin: process.env.FRONTEND_URL || 'https://taskmanagerhrms.netlify.app',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(helmet());
 // Routes
 app.use('/api/auth', authRoutes);
