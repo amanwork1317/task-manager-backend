@@ -3,7 +3,7 @@ declare const User: mongoose.Model<{
     name: string;
     email: string;
     password: string;
-    role: "admin" | "member";
+    role: "superadmin" | "admin" | "member";
     active: boolean;
     avatar: string;
     passwordResetToken?: string | null;
@@ -12,7 +12,7 @@ declare const User: mongoose.Model<{
     name: string;
     email: string;
     password: string;
-    role: "admin" | "member";
+    role: "superadmin" | "admin" | "member";
     active: boolean;
     avatar: string;
     passwordResetToken?: string | null;
@@ -23,7 +23,7 @@ declare const User: mongoose.Model<{
     name: string;
     email: string;
     password: string;
-    role: "admin" | "member";
+    role: "superadmin" | "admin" | "member";
     active: boolean;
     avatar: string;
     passwordResetToken?: string | null;
@@ -38,7 +38,7 @@ declare const User: mongoose.Model<{
     name: string;
     email: string;
     password: string;
-    role: "admin" | "member";
+    role: "superadmin" | "admin" | "member";
     active: boolean;
     avatar: string;
     passwordResetToken?: string | null;
@@ -47,7 +47,7 @@ declare const User: mongoose.Model<{
     name: string;
     email: string;
     password: string;
-    role: "admin" | "member";
+    role: "superadmin" | "admin" | "member";
     active: boolean;
     avatar: string;
     passwordResetToken?: string | null;
@@ -58,7 +58,7 @@ declare const User: mongoose.Model<{
     name: string;
     email: string;
     password: string;
-    role: "admin" | "member";
+    role: "superadmin" | "admin" | "member";
     active: boolean;
     avatar: string;
     passwordResetToken?: string | null;

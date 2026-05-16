@@ -20,7 +20,10 @@ const PORT = Number(process.env.PORT) || 5000;
 app.use(express.json());
 
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'https://taskmanagerhrms.netlify.app',
+  origin: [
+    process.env.FRONTEND_URL || 'https://taskmanagerhrms.netlify.app',
+    'http://localhost:3000'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,

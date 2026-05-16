@@ -8,8 +8,8 @@ const router = express.Router();
 router.use(protect); // All routes protected
 
 router.get('/', getAllUsers);
-router.patch('/:id', restrictTo('admin'), updateUser);
-router.patch('/:id/reset-password', restrictTo('admin'), updateUserPassword);
-router.delete('/:id', restrictTo('admin'), deleteUser);
+router.patch('/:id', restrictTo('superadmin', 'admin'), updateUser);
+router.patch('/:id/reset-password', restrictTo('superadmin', 'admin'), updateUserPassword);
+router.delete('/:id', restrictTo('superadmin', 'admin'), deleteUser);
 
 export default router;

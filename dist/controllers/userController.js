@@ -1,7 +1,17 @@
 import User from '../models/User.js';
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find().select('-password');
+        const user = req.user;
+        let query = {};
+        if (user.role !== 'superadmin') {
+            query = {
+                $or: [
+                    { role: 'member' },
+                    { _id: user._id }
+                ]
+            };
+        }
+        const users = await User.find(query).select('-password');
         res.status(200).json({
             status: 'success',
             results: users.length,

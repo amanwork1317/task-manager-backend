@@ -12,7 +12,16 @@ const signToken = (id: string) => {
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role, active } = req.body;
+    const userRole = (req as any).user?.role;
+    const targetRole = role || 'member';
+
+    if (userRole === 'admin' && targetRole !== 'member') {
+      return res.status(403).json({ message: 'Admins can only create members' });
+    }
+    if (userRole === 'superadmin' && targetRole !== 'admin') {
+      return res.status(403).json({ message: 'Superadmins can only create admins' });
+    }
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -23,12 +32,13 @@ export const register = async (req: Request, res: Response) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Create user (Role is always member by default for security)
+    // Create user (Role and active can be set by admin)
     const newUser = await User.create({
       name,
       email,
       password: hashedPassword,
-      role: 'member',
+      role: role || 'member',
+      active: active !== undefined ? active : true,
     });
 
     // Create token
@@ -39,10 +49,14 @@ export const register = async (req: Request, res: Response) => {
       token,
       data: {
         user: {
+          _id: newUser._id,
           id: newUser._id,
           name: newUser.name,
           email: newUser.email,
           role: newUser.role,
+          active: newUser.active,
+          createdAt: newUser.createdAt,
+          avatar: newUser.avatar,
         },
       },
     });
@@ -127,7 +141,7 @@ export const resetPassword = async (req: Request, res: Response) => {
       return res.status(400).json({ status: 'fail', message: 'Token is invalid or has expired.' });
     }
 
-    user.password = req.body.password;
+    user.password = await bcrypt.hash(req.body.password, 12);
     user.passwordResetToken = null;
     user.passwordResetExpires = null;
     await user.save();
@@ -153,7 +167,7 @@ export const updateUserPassword = async (req: Request, res: Response) => {
       return res.status(404).json({ status: 'fail', message: 'User not found' });
     }
 
-    user.password = password;
+    user.password = await bcrypt.hash(password, 12);
     await user.save();
 
     res.status(200).json({
